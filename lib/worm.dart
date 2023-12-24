@@ -107,6 +107,94 @@ class Worm {
     }
   }
 
+  setDirection(int d) {
+    direction = d;
+  }
+
+  pursuitTarget(int r, int c) {
+    if (row > r && column == c) {
+      // 0
+      if ([1, 2, 3].contains(direction)) {
+        turnCounterClockwise();
+      } else if ([5, 6, 7].contains(direction)) {
+        turnClockwise();
+      } else {
+        randomMove();
+      }
+    } else if (row > r && column < c) {
+      // 1
+      if ([2, 3, 4].contains(direction)) {
+        turnCounterClockwise();
+      } else if ([6, 7, 0].contains(direction)) {
+        turnClockwise();
+      } else {
+        randomMove();
+      }
+    } else if (row == row && column < c) {
+      // 2
+      if ([3, 4, 5].contains(direction)) {
+        turnCounterClockwise();
+      } else if ([7, 0, 1].contains(direction)) {
+        turnClockwise();
+      } else {
+        randomMove();
+      }
+    } else if (row < r && column < c) {
+      // 3
+      if ([4, 5, 6].contains(direction)) {
+        turnCounterClockwise();
+      } else if ([0, 1, 2].contains(direction)) {
+        turnClockwise();
+      } else {
+        randomMove();
+      }
+    } else if (row < r && column == c) {
+      // 4
+      if ([5, 6, 7].contains(direction)) {
+        turnCounterClockwise();
+      } else if ([1, 2, 3].contains(direction)) {
+        turnClockwise();
+      } else {
+        randomMove();
+      }
+    } else if (row < r && column > c) {
+      // 5
+      if ([6, 7, 0].contains(direction)) {
+        turnCounterClockwise();
+      } else if ([2, 3, 4].contains(direction)) {
+        turnClockwise();
+      } else {
+        randomMove();
+      }
+    } else if (row == r && column > c) {
+      // 6
+      if ([7, 0, 1].contains(direction)) {
+        turnCounterClockwise();
+      } else if ([3, 4, 5].contains(direction)) {
+        turnClockwise();
+      } else {
+        randomMove();
+      }
+    } else if (row > r && column > c) {
+      // 7
+      if ([0, 1, 2].contains(direction)) {
+        turnCounterClockwise();
+      } else if ([4, 5, 6].contains(direction)) {
+        turnClockwise();
+      } else {
+        randomMove();
+      }
+    }
+  }
+
+  randomMove() {
+    if (Random().nextInt(2) == 0) {
+      turnClockwise();
+    } else {
+      turnCounterClockwise();
+    }
+  }
+
   avoidObstacle() {
     if (row == 2) {
       if (direction == 0) direction = 4;

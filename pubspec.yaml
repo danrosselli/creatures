@@ -1,6 +1,7 @@
 name: creatures
 description: Console game in dart and aditional examples.
 version: 1.0.0
+publish_to: none
 # repository: https://github.com/my_org/my_repo
 
 environment:
@@ -12,6 +13,9 @@ dependencies:
   ncurses: ^0.1.0
   vector_math: ^2.1.4
   # path: ^1.8.0
+  neural:
+   git: https://github.com/danrosselli/neural.git
+   
 
 dev_dependencies:
   lints: ^3.0.0

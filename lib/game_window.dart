@@ -1,13 +1,17 @@
 import 'dart:io';
 import 'dart:async';
-import 'dart:math';
+//import 'dart:math';
 import 'package:console/console.dart';
 import 'package:console/curses.dart';
+import 'package:neural/neural.dart';
 import 'worm.dart';
 
 class GameWindow extends Window {
   Timer? timer;
   List<Worm> worms = [];
+
+  // Instantiate neural network
+  Network neuralNetwork = Network(input: 20, hidden: [15], output: 2);
 
   // constructor
   GameWindow() : super('Creatures');
@@ -16,16 +20,63 @@ class GameWindow extends Window {
   @override
   void draw() {
     super.draw();
-    //creature.draw(row: row, column: col);
+
     for (var worm in worms) {
       worm.run();
 
-      // change direction randomically
-      if (Random().nextInt(2) == 0) {
-        worm.turnClockwise();
-      } else {
-        worm.turnCounterClockwise();
+      // use neural network to find better path
+      // create input for nn from all worms
+      List<double> input = [];
+      for (var w in worms) {
+        input.add(w.row / Console.rows);
+        input.add(w.column / Console.columns);
       }
+
+      List<double> output = neuralNetwork.forward(input);
+
+      int r = (output[0] * Console.rows).round();
+      int c = (output[1] * Console.columns).round();
+
+      //Console.moveCursor(row: 2, column: 0);
+      //print(
+      //    'input: $input | output: $output | ${worm.row} | ${worm.row / Console.rows} | ${((worm.row / Console.rows) * Console.rows).round()}   ');
+
+      worm.pursuitTarget(r, c);
+      /*
+      cohesion: function(neighboors)
+      {
+        var sum = new Vector(0,0);
+        var count = 0;
+        for (var i in neighboors)
+        {
+          if (neighboors[i] != this)// && !neighboors[i].special)
+          {
+            sum.add(neighboors[i].location);
+            count++;
+          }
+        }	
+        sum.div(count);
+
+        return sum;
+      }
+      var targetX = function(creature){
+        var cohesion = creature.cohesion(world.creatures);
+        return cohesion.x / world.width;
+      }
+
+      var targetY = function(creature){
+        var cohesion = creature.cohesion(world.creatures);
+        return cohesion.y / world.height;
+      }
+
+      var targetAngle = function(creature){
+        var alignment = creature.align(world.creatures);
+        return (alignment.angle() + Math.PI) / (Math.PI*2);
+      }
+      */
+      // learn
+      List<double> target = [worm.row / Console.rows, worm.column / Console.columns];
+      neuralNetwork.backward(target, 0.5);
     }
   }
 
