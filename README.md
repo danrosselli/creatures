@@ -1,2 +1,2 @@
 # Creatures
-Console game in Dart and aditional examples
+Base for console games in Dart and aditional examples
